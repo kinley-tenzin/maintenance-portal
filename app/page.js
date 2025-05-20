@@ -49,7 +49,7 @@ export default function LandingAuthPage() {
         if (data.user && data.user.role === 'admin') {
           router.replace("/admin");
         } else {
-          router.replace("/home");
+        router.replace("/home");
         }
       } else {
         setError(data.message || "Invalid credentials");

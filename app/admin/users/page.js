@@ -103,11 +103,11 @@ export default function UsersPage() {
             >
               <i className="ri-close-line text-2xl" />
             </button>
-            <h2 className="text-xl font-bold mb-2">User Details</h2>
-            <div className="mb-2"><b>Username:</b> {selectedUser.username}</div>
-            <div className="mb-2"><b>Email:</b> {selectedUser.email}</div>
-            <div className="mb-2"><b>Role:</b> {selectedUser.role}</div>
-            <div className="mb-2"><b>Status:</b> {selectedUser.active === false ? "Inactive" : "Active"}</div>
+                <h2 className="text-xl font-bold mb-2">User Details</h2>
+                <div className="mb-2"><b>Username:</b> {selectedUser.username}</div>
+                <div className="mb-2"><b>Email:</b> {selectedUser.email}</div>
+                <div className="mb-2"><b>Role:</b> {selectedUser.role}</div>
+                <div className="mb-2"><b>Status:</b> {selectedUser.active === false ? "Inactive" : "Active"}</div>
           </div>
         </div>
       )}
