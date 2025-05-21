@@ -15,7 +15,7 @@ export default function AdminLayout({ children, activeTab }) {
   const [uploading, setUploading] = useState(false);
   const notifRef = useRef();
   const profileRef = useRef();
-  const audioRef = useRef(new Audio('/notification.mp3'));
+  const audioRef = useRef(null);
   const hasPlayedSound = useRef(false);
   const router = useRouter();
 
@@ -48,6 +48,11 @@ export default function AdminLayout({ children, activeTab }) {
       window.removeEventListener('userProfileUpdated', handleProfileUpdate);
     };
   }, [router]);
+
+  useEffect(() => {
+    // Only run on client
+    audioRef.current = new Audio('/notification.mp3');
+  }, []);
 
   // Fetch notifications function
   const fetchNotifications = () => {
