@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
 "use client";
 
 import { useState } from "react";
