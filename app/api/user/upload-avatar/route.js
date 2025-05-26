@@ -28,11 +28,25 @@ export async function POST(req) {
       return NextResponse.json({ message: 'No file uploaded' }, { status: 400 });
     }
 
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json({ message: 'Invalid file type. Only JPEG, PNG and GIF are allowed.' }, { status: 400 });
+    }
+
+    // Create avatars directory if it doesn't exist
+    const avatarsDir = path.join(process.cwd(), 'public', 'avatars');
+    if (!fs.existsSync(avatarsDir)) {
+      fs.mkdirSync(avatarsDir, { recursive: true });
+    }
+
     // Save file to /public/avatars
     const buffer = Buffer.from(await file.arrayBuffer());
-    const ext = file.name.split('.').pop();
+    const ext = file.name.split('.').pop().toLowerCase();
     const fileName = `${userId}_${Date.now()}.${ext}`;
-    const filePath = path.join(process.cwd(), 'public', 'avatars', fileName);
+    const filePath = path.join(avatarsDir, fileName);
+
+    // Write file
     fs.writeFileSync(filePath, buffer);
 
     // Update user document with imageUrl
@@ -43,9 +57,12 @@ export async function POST(req) {
       { $set: { imageUrl } }
     );
 
-    return NextResponse.json({ message: 'Avatar uploaded', imageUrl });
+    return NextResponse.json({ message: 'Avatar uploaded successfully', imageUrl });
   } catch (error) {
     console.error('Avatar upload error:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ 
+      message: 'Failed to upload avatar. Please try again.',
+      error: error.message 
+    }, { status: 500 });
   }
 } 

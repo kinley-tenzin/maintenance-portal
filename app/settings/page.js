@@ -88,8 +88,25 @@ export default function SettingsPage() {
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size too large. Maximum size is 5MB.');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Invalid file type. Only JPEG, PNG and GIF are allowed.');
+      return;
+    }
+
     setAvatarPreview(URL.createObjectURL(file));
     setUploading(true);
+    setError("");
+    setSuccess("");
+    
     const formData = new FormData();
     formData.append('avatar', file);
     try {
@@ -101,11 +118,12 @@ export default function SettingsPage() {
       const data = await res.json();
       if (res.ok) {
         setUser((prev) => ({ ...prev, imageUrl: data.imageUrl }));
+        setSuccess('Profile picture updated successfully');
       } else {
         setError(data.message || 'Failed to upload image');
       }
     } catch (err) {
-      setError('Error uploading image');
+      setError('Error uploading image. Please try again.');
     } finally {
       setUploading(false);
     }
